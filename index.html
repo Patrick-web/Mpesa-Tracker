@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/nav.css">
+        <link rel="stylesheet" type="text/css" href="css/card.css">
+        <link rel="stylesheet" type="text/css" href="css/slider.css">
+        <link rel="stylesheet" type="text/css" href="css/actions.css">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <div class="blur"></div>
+            <div class="nav">
+                <div class="upperNav">
+                    <img id="logo" src="./img/logo.svg" alt="">
+                    <p id="logoName">Mpesa Tracker</p>
+                    <img id="dots" src="./img/dots.svg" alt="">
+                </div>
+                <div class="lowerNav">
+                    <a href="#" class="link active">
+                        <p>Usage</p>
+                    </a>
+                    <a href="#" class="link">
+                        <p>Timeline</p>    
+                    </a>
+                </div>
+            </div>
+
+            <div id="actions">
+                <div class="select centerTxt dateBox">
+                        <img src="./img/calendar-alt.svg" alt="" class="select-logo">
+
+                    <div class="select-toggle">
+                        <p class="selected flex">
+                            Today
+                            <img src="img/tri.svg" class="tri" alt="">
+                        </p>
+                    </div>
+                    <div class="selects">
+                        <p class="select-item">Today</p>
+                        <p class="select-item">Yesterday</p>
+                        <p class="select-item">This week</p>
+                        <p class="select-item">Last Week</p>
+                        <p class="select-item">Custom</p>
+                    </div>
+                </div>
+                <div class="select centerTxt filterBox">
+                        <img src="./img/filter.svg" alt="" class="select-logo">
+
+                    <div class="select-toggle">
+                        <p class="selected flex">
+                            Filter
+                            <img src="img/tri.svg" class="tri" alt="">
+                        </p>
+                    </div>
+                    <div class="selects filters">
+                        <div class="filter filter-amount">
+                            <p class="filter-name">by Price</p>
+                            <div class="filterItems">
+                                <p class="filter-item">> 50</p>
+                                <p class="filter-item">> 100</p>
+                                <p class="filter-item">> 150</p>
+                                <p class="filter-item">> 200</p>
+                            </div>
+                        </div>
+                            <div class="filter filter-recipient">
+                                <p class="filter-name">by Recipient</p>
+                                <div class="filterItems">
+                                    <p class="filter-item selected-filter">Mimshack Hotel</p>
+                                    <p class="filter-item">Jane;s Caffe</p>
+                                    <p class="filter-item">Mum</p>
+                                    <p class="filter-item">Njeruky Enterprise</p>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="cards">
+                <div class="card">
+                    <div class="flex card-upper">
+                        <p class="amount">15 Ksh</p>
+                        <p class="type">Paid</p>
+                    </div>
+                    <div class="flex">
+                        <p class="recipient">Mimshack Hotel</p>
+                        <p class="date">22 Aug 2020</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="flex card-upper">
+                        <p class="amount">100 Ksh</p>
+                        <p class="type">Sent</p>
+                    </div>
+                    <div class="flex">
+                        <p class="recipient">John's Kinyozi</p>
+                        <p class="date">22 Aug 2020</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="slider centerAbs">
+                <div class="pullArea centerTxt">
+                    <img id="puller" src="./img/arrows.svg" alt="">
+                </div>
+                <div class="info">
+                    <div class="info-box flex">
+                        <p class="info-key">Total Spent</p>
+                        <p id="totalSpent" class="info-value">780 Ksh</p>
+                    </div>
+                    <div class="info-box flex">
+                        <p class="info-key">No of Uses</p>
+                        <p id="totalSpent" class="info-value">780</p>
+                    </div>
+                    <div class="info-box flex">
+                        <p class="info-key">Current Balance</p>
+                        <p id="totalSpent" class="info-value">220 Ksh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript"  src="js/ui.js"></script>
+        <script type="text/javascript"  src="js/moment.min.js"></script>
+        <!-- <script type="text/javascript"  src="js/time.js"></script> -->
+        <script type="text/javascript"  src="js/index.js"></script>
+    </body>
+</html>

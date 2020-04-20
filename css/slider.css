@@ -1,0 +1,47 @@
+.slider{
+    background: linear-gradient(90deg,#FF5157,#FF9900);
+    width: 98%;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    bottom: -95px;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    z-index: 3;
+    transition: 0.2s ease-in-out;
+}
+
+.pullArea{
+    position: relative;
+    text-align: center;
+}
+#puller{
+    width: 8%;
+    transition: 0.1s ease;
+}
+.info-box{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+    color: white;
+}
+.info-key{
+    color: rgb(240, 240, 240);
+    font-size: 300;
+}
+.info-value{
+    font-weight: 800;
+    font-size: 1.41em;
+}
+.centerAbs{
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+}
+.showInfoBox .slider{
+    bottom: 0px;
+    border-radius: 5px;
+}
+.showInfoBox #puller{
+    transform: rotateX(180deg);
+}

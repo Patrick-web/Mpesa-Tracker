@@ -1,0 +1,31 @@
+.cards{
+    margin-top: 5px;
+}
+.card{
+    background: #F4F4F4;
+    padding: 5px;
+    margin-bottom: 15px;
+    margin-right: 8px;
+    margin-left: 8px;
+    border-radius: 8px;
+    box-shadow: 4px 4px 8px 2px rgba(128, 128, 128, 0.473);
+}
+.card-upper{
+    margin-bottom: 10px;
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.amount{
+    color: #FF3E09;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+.type{
+    color: #FF4000;
+}
+.recipient{
+    font-size: 1.15em
+}
