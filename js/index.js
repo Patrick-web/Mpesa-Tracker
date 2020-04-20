@@ -19,6 +19,7 @@
 var app = {
     messages:[],
     result:null,
+    removeSpaces:true,
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady);
     },
@@ -33,7 +34,7 @@ var app = {
                   if(dt){
 
                     const message = {
-                        amount:0,
+                        amount:'N/A',
                         src:null,
                         text:msg.body,
                         type:null,
@@ -44,48 +45,69 @@ var app = {
                     }
                     const payReg = /paid\s*to\s*(\w*)\s*(\w*)(.*) on/;
                     const pay$Reg = /Ksh(.*)\.\d{2}\s*paid/;
-                    const sentReg =  /(sent\s*to)\s(\w*)/;
+                    const sentReg =  /sent\s*to\s*(\w*)\s*(\w*)(.*) on/;
                     const sent$Reg = /Ksh(.*)\.\d{2}\s*sent/;
                     const recReg =  /(from)\s*(\w*)\s*(\w*)/;
                     const rec$Reg =  /(received\s*Ksh)(.*)\sfrom/;
                     const buyReg = /bought\s*Ksh.*airtime/;
                     const transfsReg =  /transferred\s*(to|from)\s*M-shwari/i
-                    const transf$Reg =  /transferred\s*(to|from)\s*M-shwari/i
+                    const transf$Reg =  /Ksh(.*)\.\d{2}\s*transferred/i
+                    const withdrwReg = /-\s(.*)New/;
+                    const withdrw$Reg = /Ksh(.*)\.\d{2}\s*from/i;
                     if(payReg.test(msg.body)){
                         message.type = 'Paid';
                         // console.log(msg.body);
-                        message.src = app.shortener(msg.body.match(payReg))
                         message.amount = app.shortener(msg.body.match(pay$Reg))
-
+                        app.removeSpaces = false;
+                        message.src = app.shortener(msg.body.match(payReg));
+                        app.removeSpaces = true;
+                        
                     }else if(sentReg.test(msg.body)){
                         message.type = 'Sent'
                         // console.log(msg.body);
-                        message.amount = app.shortener(msg.body.match(sent$Reg))
+                        message.amount = app.shortener(msg.body.match(sent$Reg));
+                        app.removeSpaces = false;
+                        message.src = app.shortener(msg.body.match(sentReg))
+                        app.removeSpaces = true;
+                        
                     }
                     else if(rec$Reg.test(msg.body)){
                         // console.log(msg.body);
-                        message.amount = app.shortener(msg.body.match(rec$Reg))
+                        message.amount = app.shortener(msg.body.match(rec$Reg));
+                        app.removeSpaces = false;
+                        message.src = app.shortener(msg.body.match(recReg));
                         message.type = 'Received'
+                        app.removeSpaces = true;
                     }
                     else if(buyReg.test(msg.body)){
                         // console.log(msg.body);
-                        message.amount = app.shortener(msg.body.match(buyReg))
+                        message.amount = app.shortener(msg.body.match(buyReg));
+                        message.src = 'airtime'
                         message.type = 'Bought'
                     }else if(transfsReg.test(msg.body)){
                         // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(transf$Reg))
                         message.type = 'Transferred'
                         message.src = 'Mshwari'
+                    }else if(withdrwReg.test(msg.body)){
+                        message.amount = app.shortener(msg.body.match(withdrw$Reg))
+                        message.type = 'Withdraw',
+                        app.removeSpaces = false;
+                        message.src = app.shortener(msg.body.match(withdrwReg))
+                        app.removeSpaces = true;
                     }
-                    app.messages.push(message)
+
+                    if(message.type && message.src){
+                        app.messages.push(message)
+                    }
                   }
                 })
 
 
                 // console.log("Now today's Messages");
                 // console.log(app.todayMsgs());
-                // console.log("Now yesterday's Messages");
-                // console.log(app.yesterdayMsgs());
+                console.log("Now yesterday's Messages");
+                console.log(app.yesterdayMsgs());
                 // console.log("Now This week's Messages");
                 // console.log(app.thisWeekMsgs());
                 // console.log("Now Last week's Messages");
@@ -214,15 +236,24 @@ var app = {
         }
     },
     shortener(string){
-        let replacers = [/ /g,/Ksh/g,/\.00/g,/paid/g,/transferred/g,/bought/g,/of/g,/on/g,/airtime/g,/from/g,/received/g,/sent/g,/M-shwari/gi]
-        // console.log(string);
-        // console.log(string[0]);
+        let replacers = [/ /g,/Ksh/g,/\.00/g,/paid/g,/transferred/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi]
+        let replacers2 = [/Ksh/g,/\.00/g,/paid/g,/transferred/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi]
         let result = string[0];
-        replacers.forEach((replacer)=>{
-            result = result.replace(replacer,'')
-        })
+        if(app.removeSpaces){
+            replacers.forEach((replacer)=>{
+                result = result.replace(replacer,'')
+            })
+        }else{
+            replacers2.forEach((replacer)=>{
+                result = result.replace(replacer,'')
+            })
+        }        
         // console.log(result);
         return result
+    },
+    removeNumber(string){
+        string = string.replace(/07.*/,'')
+        return string
     }
 
 
