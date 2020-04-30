@@ -1,0 +1,88 @@
+.statsPage{
+    position: fixed;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    background: whitesmoke;
+    z-index: 8;
+    display: none;
+    padding-bottom: 40px;
+}
+.darkMode .statsPage{
+    background: black;
+}
+.stitle{
+    background: linear-gradient(150deg,#FF9900,#FF4000);
+    text-align: center;
+    font-size: 3em;
+    font-weight: 900;
+    color: white;
+    width: 50%;
+    margin: auto;
+    border-radius: 0px 0px 30px 30px;
+    margin-bottom: 10px;
+}
+#hideStats{
+    position: absolute;
+    top:10px;
+    right: 10px;
+    width: 25px;
+}
+.statCardsContainer{
+    height: 50%;
+    width: 100%;
+    padding-top: 5px;
+    overflow-y: scroll;
+    padding-bottom: 40px;
+    margin-top: 10px;
+}
+.statCard div{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    height: 100%;
+}
+.statCard{
+    width: 95%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    background: #EBEBEB;
+    box-shadow: 2px 2px 6px rgba(128, 128, 128, 0.24);
+    margin-bottom: 10px;
+    margin-top: 15px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.darkMode .statCard{
+    background: rgb(15, 15, 15);
+    box-shadow: 2px 2px 6px rgba(41, 41, 41, 0.24);
+
+}
+.statAmount{
+    position: relative;
+    background: orange;
+    color: white;
+    text-align: center;
+    font-size: 1.3em;
+}
+.sAm{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%); 
+
+}
+.statRec{
+    color: #797979;
+    padding-left: 10px;
+    font-size: 1.2em;
+}
+.darkMode .statRec{
+    color: gainsboro;
+}
+
+.showStats .statsPage{
+    display: block;
+}
+

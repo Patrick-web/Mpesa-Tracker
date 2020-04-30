@@ -1,0 +1,64 @@
+.menu{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top:-100%;
+    right: 5px;
+    background: #FF5E00;
+    z-index: 6;
+    justify-content: center;
+    align-items: center;
+    width: 12vw;
+    box-shadow: 0px 0px 5px white;
+    border-radius: 40px;
+    overflow: hidden;
+    opacity: 0;
+}
+.darkMode .menu{
+    background: black;
+}
+.showMenu .menu{
+    top:1%;
+    opacity: 1;
+}
+#menuColapse img{
+    width: 100%;
+}
+
+.showMenu .menu-toggle{
+    opacity: 0;
+}
+.modeToggle{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.darkMode .sun{
+    display: none;
+}
+.darkMode .moon{
+    display: block;
+    transform: rotate(0deg);
+}
+.moon,.sun{
+    transform: rotate(360deg);
+    width: 80%;
+    /* transition: 0.2s; */
+}
+.moon{
+    display: none;
+    width: 75%;
+
+}
+.about{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+}
+.about img{
+    width: 100%;
+}

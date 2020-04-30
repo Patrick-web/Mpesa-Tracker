@@ -1,0 +1,133 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+body{
+    background: #D1D1D1;
+    height: 100px;
+    overflow: hidden;
+}
+.darkMode{
+    background: black;
+    
+}
+.no-msgs{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translateX(-50%) translateY(-40%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+.no-msgs #loadText{
+    margin-top: 40px;
+    font-size: 2.7em;
+    width: 100%;
+    color: white;
+    font-family: -apple-system, Roboto;
+    font-weight: 300;
+}
+.no-msgs #loadDots{
+    margin-top: -20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loadDots p{
+    font-size: 5em;
+    margin: 5px;
+    margin-top: -10px;
+}
+.no-msgs img{
+    width: 50%;
+}
+.shower{
+    position: fixed;
+    top:50%;
+    right: 0%;
+    transform: translateY(-50%);
+    z-index: 4;
+    display: none;
+    justify-content: space-between;
+    align-items:stretch;
+    color: white;
+    border-radius: 30px 0px 0px 30px;
+}
+#showStats{
+    top:60%;
+}
+.shower p{
+    background: purple;
+    font-size: 1.2em;
+    height: 100%;
+}
+.monthExplainer{
+    display: none;
+}
+.shower img{
+    width: 40px;
+}
+.showMonthMsgs .showMonth{
+    display: flex;
+}
+.showDayMsgs .showDays{
+    display: flex;
+}
+.showMonthExplainer .monthExplainer{
+    display: block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.filter-info{
+    background: rgb(195, 0, 255);
+    color: white;
+    width: 100%;
+    display: none;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+    font-size: 1.2em;
+    padding: 8px;
+    overflow: hidden;
+}
+.currentFilter{
+    margin-left: 5px;
+    margin-right: 25px;
+    font-weight: bold;
+}
+#unfilter{
+    position: absolute;
+    right: 5px;
+    background: rgb(240, 0, 140);
+    border:1px solid white;
+    outline: none;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: white;
+    font-weight: 900;
+}
+
+.showCurrentFilter .filter-info{
+    display: flex;
+}
+.promise{
+    background: linear-gradient(150deg,orange,orangered);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 8;
+    color: white;
+    font-size: 1.5em;
+}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/nav.css">
+        <link rel="stylesheet" type="text/css" href="css/card.css">
+        <link rel="stylesheet" type="text/css" href="css/slider.css">
+        <link rel="stylesheet" type="text/css" href="css/picker.css">
+        <link rel="stylesheet" type="text/css" href="css/actions.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/menu.css">
+        <link rel="stylesheet" href="./js/chart/Chart.css">
+        <link rel="stylesheet" href="./css/stats.css">
+        <link rel="stylesheet" href="./css/animate.css">
+        <title>MpesaTracker</title>
+    </head>
+    <body>
+        <div class="app">
+            <div class="shower showMonth">
+                <img src="./img/M.svg" alt="">
+                <p class="monthExplainer">Show Selected Month Messages</p>
+            </div>
+            <div class="shower showDays">
+                <img src="./img/D.svg" alt="">
+                <p class="expl"></p>
+            </div>
+            <div id="showStats" class="shower">
+                <img src="./img/pie.svg" alt="">
+            </div>
+            <div class="no-msgs">
+                <img src="./img/inbox.svg" alt="">
+                <div>
+                     <p id="loadText"> Getting Messages </p>
+                    <div id="loadDots">
+                    <p class="animated bounceIn infinite">.</p>
+                    <p class="animated bounceIn infinite delay-quater">.</p>
+                    <p class="animated bounceIn infinite delay-half">.</p>
+                    </div>
+            </div>
+            </div>
+
+            <div class="blur"></div>
+
+            <div class="menu">
+                <div id="menuColapse">
+                    <img  src="./img/Cancel.svg" alt="" id="hidemenu">
+                </div>
+                <div class="modeToggle flex">
+                    <img class="moon" src="./img/moon.svg" alt="">
+                    <img class="sun" src="./img/sun.svg" alt="">
+                </div>
+                <div class="about">
+                    <img src="./img/info.svg" alt="">
+                </div>
+            </div>
+
+            <div class="nav">
+                <div class="upperNav">
+                    <img id="logo" src="./img/logo.svg" alt="">
+                    <p id="logoName">Mpesa Tracker</p>
+                    <div class="menu-toggle">
+                        <img id="dots" src="./img/dots.svg" alt="">
+                    </div>
+                </div>
+                <div class="lowerNav">
+                    <a href="#" class="link active">
+                        <p>Usage</p>
+                    </a>
+                    <a href="timeline.html" class="link">
+                        <p>Timeline</p>    
+                    </a>
+                </div>
+            </div>
+
+            <div id="actions">
+                <div class="select centerTxt dateBox">
+                        <img src="./img/calendar-alt.svg" alt="" class="select-logo">
+
+                    <div class="select-toggle">
+                        <p id="selectedDate" class="selected flex">
+                            Today
+                            <img src="img/tri.svg" class="tri" alt="">
+                        </p>
+                    </div>
+                    <div class="selects" style="margin-top:5px">
+                        <p id="today" class="select-item selectedOpt">Today</p>
+                        <p id="yesterday" class="select-item">Yesterday</p>
+                        <p id="thisWeek" class="select-item">This week</p>
+                        <p id="lastWeek" class="select-item">Last Week</p>
+                        <p id="thisMonth" class="select-item">This Month</p>
+                        <p id="lastMonth" class="select-item">Last Month</p>
+                        <p id="customDate" class="select-item custom">Custom</p>
+                        <p id="all" class="select-item">All</p>
+                    </div>
+                </div>
+                <div class="select centerTxt filterBox">
+                        <img src="./img/filter.svg" alt="" class="select-logo">
+
+                    <div class="select-toggle forFilters">
+                        <p class="selected flex selectedFilter">
+                            Filter
+                            <img src="img/tri.svg" class="tri" alt="">
+                        </p>
+                    </div>
+                    <div class="selects filters">
+                        <div id="filter-amount" class="filter filter-amount">
+                            <p class="filter-name">Amount</p>
+                            <div class="filterItems filter-am">
+                                <!-- <p class="filter-item amountFilter">> 50</p>
+                                <p class="filter-item">> 100</p>
+                                <p class="filter-item">> 150</p>
+                                <p class="filter-item">> 200</p> -->
+                            </div>
+                        </div>
+                            <div class="filter filter-recipient">
+                                <p class="filter-name">Recipient</p>
+                                <div class="filterItems recipientFilters">
+                                    <!-- <p class="filter-item selected-filter">Mimshack Hotel</p>
+                                    <p class="filter-item">Jane;s Caffe</p>
+                                    <p class="filter-item">Mum</p>
+                                    <p class="filter-item">Njeruky Enterprise</p> -->
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-info">
+                <p>Filter: </p>
+                <p class="currentFilter">Safaricom llc </p>
+                <button id="unfilter">X</button>
+            </div>
+
+            <div class="cards">
+            </div>
+
+            <div class="fullmessage animated faster">
+            </div>
+
+            <div class="slider centerAbs">
+                <div class="pullArea centerTxt">
+                    <img id="puller" src="./img/arrows.svg" alt="">
+                </div>
+                <div class="info">
+                    <div class="info-box flex">
+                        <p class="info-key">Total Spent</p>
+                        <p class="info-value" id="totalSpent">0 Ksh</p>
+                    </div>
+                    <div class="info-box flex">
+                        <p class="info-key">No of Uses</p>
+                        <p id="totalUsages" class="info-value">0</p>
+                    </div>
+                    <div class="info-box flex">
+                        <p class="info-key">Current Balance</p>
+                        <p id="currentBal" class="info-value">0 Ksh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="statsPage animated extraFast">
+            <img id="hideStats" src="./img/back.svg" alt="">
+            <p class="stitle">
+                Stats
+            </p>
+            <canvas id="chartArea"></canvas>
+            <div class="statCardsContainer">
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">Pespal Acount 071866396+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+                <div class="statCard">
+                    <div class="statRec">last item+</div>
+                    <div class="statAmount"> <p class="sAm">1500</p></div>
+                </div>
+            </div>
+            <div class="lift"></div>
+        </div>
+        <div class="promise">
+            <p>I will only retrieve the Mpesa messages and NOTHING else, Promise</p>
+        </div>
+
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript"  src="js/ui.js"></script>
+        <script type="text/javascript"  src="js/moment.min.js"></script>
+        <!-- <script type="text/javascript"  src="js/time.js"></script> -->
+        <script type="text/javascript"  src="js/index.js"></script>
+        <script type="text/javascript"  src="js/filter.js"></script>
+        <script src="./js/chart/Chart.js"></script>
+        <script src="./js/stats.js"></script>
+    </body>
+
+
+</html>

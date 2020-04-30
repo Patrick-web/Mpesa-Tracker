@@ -1,0 +1,177 @@
+.app{
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+#actions{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+    column-gap: 10px;
+    margin-top: 5px;
+    position: sticky;
+    z-index: 4;
+}
+.select{
+    width:100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    position: relative;
+}
+.dsel{
+    margin-top: 5px;
+}
+.select-logo{
+    width: 20px;
+    margin-left: 10px;
+}
+.select-toggle{
+    margin-left: -10px;
+}
+.selects{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    /* background: rgb(255, 255, 255); */
+    transform: scaleY(0);
+    transform-origin: top;
+}
+.select-item{
+    padding: 5px;
+}
+.flex-between{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+.flex-around{
+    align-items: cselect-itenter;
+    justify-content: space-around;
+}
+.flex-even{
+    justify-content: space-evenly;
+    align-items: center;
+}
+.selected{
+    background: white;
+    text-align: left;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: -30px;
+}
+.darkMode .selected{
+    background: #171717;
+    color: gainsboro;
+}
+.tri{
+    width: 18px;
+    margin-left: 10px;
+}
+.darkMode .tri{
+    filter: invert(100%);
+}
+.blur{
+    position: absolute;
+    width: 100%;
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 3;
+    background: rgb(73, 73, 73);
+    height: 100%;
+    transform: scaleX(2);
+    transform-origin: center;
+    opacity: 0;
+    pointer-events: none;
+}
+.darkMode .blur{
+    background: rgb(4, 1, 31);
+
+}
+.showBlur .blur{
+    opacity: 0.7;
+    pointer-events: all;    
+}
+.showSelects .selects{
+    transform: scaleY(1);
+}
+.showSelects .tri{
+    transform: rotate(180deg);
+}
+
+
+.filters{
+    display:grid;
+    grid-template-columns: 2fr 4fr;
+    align-items: flex-start;
+    text-align: left;
+    width: 200%;
+    column-gap: 10px;
+    background: none;
+    margin-top: 5px;
+}
+/* .filters .selects{
+    transform: scaleX(0);
+} */
+.filter{
+    width: 100%;
+    /* background: white; */
+    border-radius: 5px;
+    overflow: hidden;
+}
+.filter p{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    justify-content: left;
+}
+.filter-name{
+    font-size: 1.3em;
+    border-bottom:1px solid gray ;
+    padding: 10px !important;
+    background: rgb(221, 221, 221);
+}
+.darkMode .filter-name{
+    background: #171717;
+    color: gainsboro;
+}
+#filter-amount{
+    justify-content: left !important;
+}
+.filterItems{
+    max-height: 50vh;
+    overflow: scroll;
+}
+.filter-item,.select-item{
+    font-size: 1.2em;
+    background: rgb(255, 255, 255);
+    border-bottom: 1px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.darkMode .filter-item{
+    background: black;
+    color: gainsboro;
+}
+.darkMode .select-item{
+    background: black;
+    color: gainsboro;
+}
+.selected-filter,selected-date{
+    background: linear-gradient(150deg,orange,rgb(253, 80, 0));
+    color: white;
+    border:none
+}
+.selectedOpt{
+    background: linear-gradient(150deg,orange,rgb(253, 80, 0));
+
+}
