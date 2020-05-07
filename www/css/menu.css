@@ -24,7 +24,9 @@
 #menuColapse img{
     width: 100%;
 }
-
+.darkMode #dots{
+    filter: invert(100%);
+}
 .showMenu .menu-toggle{
     opacity: 0;
 }
@@ -33,6 +35,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.darkMode .menu-toggle{
+    background: black;
+    border: 0.4px solid white;
 }
 .darkMode .sun{
     display: none;

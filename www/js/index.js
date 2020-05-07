@@ -1,5 +1,6 @@
 
 var app = {
+    messagesFetched:false,
     messages:[],
     usageMessages:[],
     todayMessagesArr:[],
@@ -20,12 +21,36 @@ var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady);
     },
+    clearPersistedMsgs(){
+        window.localStorage.removeItem()
+    },
+    initAds:function(){
+        var admobid = {
+            banner: 'ca-app-pub-4364336677896612/8669650444', // or DFP format "/6253334/dfp_example_ad"
+            interstitial: 'ca-app-pub-4364336677896612/3142470520'
+        };
+    //banner ca-app-pub-4364336677896612/8669650444
+    //interstitial ca-app-pub-4364336677896612/3142470520
+        if(document.body.classList.contains('timelineTime') == false){
+
+            AdMob.createBanner({
+                adId: admobid.banner,
+                position: AdMob.AD_POSITION.BOTTOM_CENTER,
+                autoShow: true
+            },()=>{console.log("Banner showing")},(err)=>console.log('Error in showing banner ' +err));
+        }else{
+            setTimeout(()=>{
+                AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:true} );
+            },60000)
+        }
+    },
     onDeviceReady: function() {
+
+        app.initAds()
         app.msgs()
         app.addListeners();
         if(window.localStorage.getItem('firstCustomDate') == null){
             window.localStorage.setItem("firstCustomDate", "true");
-            console.log("initial set");
         }
 
     },
@@ -51,6 +76,9 @@ var app = {
         const customDate = document.querySelector('#customDate');
         customDate.addEventListener('click',app.getCustomDay);
         
+        const allMsgs = document.querySelector('#all');
+        allMsgs.addEventListener('click',app.showAllMessages);
+
         const showMonthMsgs = document.querySelector('.showMonth');
         showMonthMsgs.addEventListener('click',()=>{
             app.getCustomMonth();
@@ -59,6 +87,7 @@ var app = {
         })
         const showDayMsgs = document.querySelector('.showDays');
         showDayMsgs.addEventListener('click',()=>{
+            document.querySelector('#selectedDate').textContent = app.specDay;
             app.showSpecificDayMessages(app.customDay);
             app.showMonthToggler();
             app.hideDayToggler();
@@ -67,7 +96,6 @@ var app = {
     msgs: function(){
         smsreader.filterSenders(['MPESA'])
             .then((msgs)=>{
-                console.log(msgs[0]);
                 // window.alert('access granted')
                 msgs.forEach(msg=>{
                     const dt = app.dateTime(msg)
@@ -92,36 +120,46 @@ var app = {
                     const recReg =  /(from)\s*(\w*)\s*(\w*)/;
                     const rec$Reg =  /(received\s*Ksh)(.*)\sfrom/;
                     const buyReg = /bought\s*Ksh.*airtime/;
-                    const transfsReg =  /transferred\s*(to|from)\s*M-shwari/i
-                    const transf$Reg =  /Ksh(.*)\.\d{2}\s*transferred/i
+                    const transfsReg =  /transferred\s*(to)\s*M-shwari/i;
+                    const transfsRegFrom =  /transferred\s*(from)\s*M-shwari/i;
+                    const transf$Reg =  /Ksh(.*)\.\d{2}\s*transferred/i;
                     const withdrwReg = /-\s(.*)New/;
                     const withdrw$Reg = /Ksh(.*)\.\d{2}\s*from/i;
+                    const isGiveReg = /Give/;
+                    const giveRec = /to.* New/;
+                    const giveAmount = /(Give\s*Ksh)(.*)\scash/
                     if(payReg.test(msg.body)){
                         message.type = 'Paid';
-                        // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(pay$Reg));
                         if(message.amount){
                             app.removeSpaces = false;
                             message.balance = app.getBalance(msg.body);
                             message.src = app.shortener(msg.body.match(payReg));
                             app.removeSpaces = true;
-                            app.usageMessages.unshift(message)
+                            app.usageMessages.push(message)
                         }
 
                     }else if(sentReg.test(msg.body)){
                         message.type = 'Sent'
-                        // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(sent$Reg));
                         if(message.amount){
                             app.removeSpaces = false;
                             message.balance = app.getBalance(msg.body);
                             message.src = app.shortener(msg.body.match(sentReg))
                             app.removeSpaces = true;
-                            app.usageMessages.unshift(message)
+                            app.usageMessages.push(message)
+                        }
+                    }else if(isGiveReg.test(msg.body)){
+                        message.type = 'Give'
+                        message.amount = app.shortener(msg.body.match(giveAmount));
+                        if(message.amount){
+                            app.removeSpaces = false;
+                            message.balance = app.getBalance(msg.body);
+                            message.src = app.shortener(msg.body.match(giveRec))
+                            app.removeSpaces = true;
                         }
                     }
                     else if(rec$Reg.test(msg.body)){
-                        // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(rec$Reg));
                         if(message.amount){
                             app.removeSpaces = false;
@@ -132,19 +170,22 @@ var app = {
                         }
                     }
                     else if(buyReg.test(msg.body)){
-                        // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(buyReg));
                         if(message.amount){
                             message.balance = app.getBalance(msg.body);
 
                         message.src = 'airtime'
                         message.type = 'Bought'
-                        app.usageMessages.unshift(message);
+                        app.usageMessages.push(message);
                         }
                     }else if(transfsReg.test(msg.body)){
-                        // console.log(msg.body);
                         message.amount = app.shortener(msg.body.match(transf$Reg))
-                        message.type = 'Transferred'
+                        message.type = 'Transferred to'
+                        message.src = 'Mshwari'
+                        app.usageMessages.push(message)
+                    }else if(transfsRegFrom.test(msg.body)){
+                        message.amount = app.shortener(msg.body.match(transf$Reg))
+                        message.type = 'Transferred from'
                         message.src = 'Mshwari'
                     }else if(withdrwReg.test(msg.body)){
                         message.amount = app.shortener(msg.body.match(withdrw$Reg))
@@ -153,30 +194,30 @@ var app = {
                         app.removeSpaces = false;
                         message.src = app.shortener(msg.body.match(withdrwReg))
                         app.removeSpaces = true;
+                        app.usageMessages.push(message)
+
                     }
 
                     if(message.type && message.src){
                         app.messages.push(message);
-
                     }
-                  }
-                })
+                }
+            })
+                app.messagesFetched = true;
                 if(document.querySelector('.app').classList.contains('timelineView')){
                     app.currentViewisTimeline = true
-                    // console.log(app.messages);
                     app.renderTimeline();
                 }else{
                     app.currentViewisTimeline = false
                     app.showTodayMessages();
-                    console.log(app.todayMessagesArr);
                 }
 
             }),
             (err)=>{
-                console.log("Error in getting messages");
                 // window.alert('access denied')
-
+                
             }
+     
     },
     buildDate(date){
         return `${moment(date).date()}/${moment(date).month() + 1}/${moment(date).year()}`
@@ -190,7 +231,6 @@ var app = {
                 specificDaySms.push(msg)
             }
         })
-        console.log(specificDaySms);
         return specificDaySms
     },
     todayMsgs:function(msgs){
@@ -204,7 +244,6 @@ var app = {
                 }
             }
         })
-        console.log(todaySms);
         return todaySms
     },
     yesterdayMsgs:function(msgs){
@@ -259,6 +298,7 @@ var app = {
     },
     thisMonthMsgs:function(msgs){
         const today = moment();
+        app.renderMonth(today)
         let thisMonthsMsgs = [];
         const dayOfYearToday = today.get('dayOfYear');
         const startOfMonth = today.startOf('month').get('dayOfYear');
@@ -276,7 +316,6 @@ var app = {
     },
     specificMonthMsgs:function(msgs,specificDay){
         const daySpecific = moment(specificDay);
-        console.log(daySpecific);
         let specificMonthsMsgs = [];
         const dayOfYearSpecific = daySpecific.get('dayOfYear');
         const startOfMonth = daySpecific.startOf('month').get('dayOfYear');
@@ -298,6 +337,7 @@ var app = {
         let lastMonthsMsgs = []
         const startOfMonth = today.startOf('month');
         const endOfLastMonth = startOfMonth.subtract(24,'hours');
+        app.renderMonth(endOfLastMonth);
         const endOfLastMonthDay = endOfLastMonth.get('dayOfYear')
         const startOfLastMonth = endOfLastMonth.startOf('month');
         const startOfLastMonthDay = startOfLastMonth.startOf('month').get('dayOfYear');
@@ -321,7 +361,6 @@ var app = {
         let time = msg.body.match(timeReg);
         if(time){
         time = time[0].replace(/ +/g,"");
-        // console.log(msg);
         const dateTime = moment(`${date} ${time}`, "DD/MM/YY h:mmA");
         const timestamp = new Date(date).getTime();
         const dt = {
@@ -338,8 +377,8 @@ var app = {
     },
     shortener:function(string){
         if(string){
-            let replacers = [/Ksh/g,/\.00/g,/paid/g,/\./,/transferred/g,/balance/g,/is /g,/transaction/gi,/cost/g,/, \d/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi,/ /g]
-            let replacers2 = [/Ksh/g,/\.00/g,/paid/g,/\./,/transferred/g,/balance/g,/is /g,/transaction/gi,/cost/g,/, \d/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi]
+            let replacers = [/Ksh/g,/\.00/g,/paid/g,/\./,/Give/,/cash/,/transferred/g,/balance/g,/is /g,/transaction/gi,/cost/g,/, \d/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/,/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi,/ /g]
+            let replacers2 = [/Ksh/g,/\.00/g,/paid/g,/\./,/Give/,/cash/,/transferred/g,/balance/g,/is /g,/transaction/gi,/cost/g,/, \d/g,/bought/g,/to /g,/of/g,/ on/g,/airtime/g,/from/g,/for/g,/07.*/,/,/,/received/g,/sent/g,/-/,/New/,/M-shwari/gi]
             let result = string[0];
             if(app.removeSpaces){
                 replacers.forEach((replacer)=>{
@@ -354,7 +393,6 @@ var app = {
         }else{
             return false
         }
-        // console.log(result);
     },
     removeNumber:function(string){
         string = string.replace(/07.*/,'')
@@ -381,6 +419,7 @@ var app = {
             </div>
             `
             )
+
             if(!document.body.classList.contains('timelineTime')){
                 document.querySelector('.line').style.display = 'none';
             }
@@ -389,10 +428,12 @@ var app = {
             document.querySelector('.no-msgs').style.display = 'flex'
             document.querySelector('#loadText').textContent = 'No Messages'
             document.querySelector('#loadDots').style.display = 'none'
+            document.body.classList.add('colapse');
         }else if(document.querySelector('.card') == null){
             document.querySelector('#loadText').textContent = 'Looking for Messages'
             document.querySelector('#loadDots').style.display = 'block'
             document.querySelector('.no-msgs').style.display = 'flex'
+            document.body.classList.add('colapse');
         }else{
             const messages = document.querySelectorAll('.card');
             messages.forEach(msg=>{
@@ -404,10 +445,17 @@ var app = {
             }
         }
         app.removeLastLine()
+
+        const cards = document.querySelectorAll('.card')
+        cards.forEach(card=>{
+            if(card.querySelector('.recipient').textContent == 'Mshwari'){
+                card.querySelector('.type').style.color = '#002aff'
+            }
+        })
     },
     showTodayMessages:function(){
         if(app.currentViewisTimeline){
-
+            document.body.classList.remove('showReportToggle');
             app.todayMessagesArr = app.todayMsgs(app.messages);
         }else{
             app.todayMessagesArr = app.todayMsgs(app.usageMessages);
@@ -418,7 +466,7 @@ var app = {
     },
     showYesterdayMessages:function(){
         if(app.currentViewisTimeline){
-
+            document.body.classList.remove('showReportToggle');
             app.yesterdayMessagesArr = app.yesterdayMsgs(app.messages);
         }else{
             app.yesterdayMessagesArr = app.yesterdayMsgs(app.usageMessages);
@@ -430,7 +478,7 @@ var app = {
     },
     showThisWeekMessages:function(){
         if(app.currentViewisTimeline){
-
+            document.body.classList.remove('showReportToggle');
             app.thisWeekMessagesArr = app.thisWeekMsgs(app.messages);
         }else{
             app.thisWeekMessagesArr = app.thisWeekMsgs(app.usageMessages);
@@ -442,7 +490,7 @@ var app = {
     },
     showLastWeekMessages:function(){
         if(app.currentViewisTimeline){
-
+            document.body.classList.remove('showReportToggle');
             app.lastWeekMessagesArr = app.lastWeekMsgs(app.messages);
         }else{
             app.lastWeekMessagesArr = app.lastWeekMsgs(app.usageMessages);
@@ -453,20 +501,21 @@ var app = {
 
     },
     showThisMonthMessages:function(){
+        
         if(app.currentViewisTimeline){
-
+            document.body.classList.add('showReportToggle');
             app.thisMonthMessagesArr = app.thisMonthMsgs(app.messages);
         }else{
             app.thisMonthMessagesArr = app.thisMonthMsgs(app.usageMessages);
-
+            
         }
-            app.render(app.thisMonthMessagesArr)
-            app.getInfo(app.thisMonthMessagesArr)
-
+        app.render(app.thisMonthMessagesArr)
+        app.getInfo(app.thisMonthMessagesArr)
+        
     },
     showLastMonthMessages:function(){
         if(app.currentViewisTimeline){
-            
+            document.body.classList.add('showReportToggle');
             app.lastMonthMessagesArr = app.lastMonthMsgs(app.messages);
         }else{
             app.lastMonthMessagesArr = app.lastMonthMsgs(app.usageMessages);
@@ -492,15 +541,18 @@ var app = {
             app.customMonthMessagesArr = app.specificMonthMsgs(app.messages,day);
         }else{
             app.customMonthMessagesArr = app.specificMonthMsgs(app.usageMessages,day);
-            console.log(app.customMonthMessagesArr);
         }
         app.render(app.customMonthMessagesArr);
         app.getInfo(app.customMonthMessagesArr);
     },
-    // showSpecificMonthMessages(){
-    //     app.usageMessages = app.specificDayMsgs(app.usageMessages);
-    //     app.render()
-    // },
+    showAllMessages:function(){
+        if(app.currentViewisTimeline){
+            app.render(app.messages);
+        }else{
+            app.render(app.usageMessages);
+            app.getInfo(app.usageMessages);
+        }
+    },
     getCustomDay:function(){
         const options = {
             type: 'date',         
@@ -517,17 +569,17 @@ var app = {
             if(customDate){
                 document.querySelector('#selectedDate').textContent = dateBuild;
                 document.querySelector('#customDate').classList.add('selectedOpt')
+                app.specDay = dateBuild;
+
             }else{
-                console.log(previousDate);
                 previousDate.classList.add('selectedOpt')
             }
     
         });   
     },
     getCustomMonth:function(){
-        console.log(app.customDay);
-        console.log(moment(app.customDay).toString());
         app.showSpecificMonthMessages(app.customDay);
+        app.renderMonth()
     },
     refreshDom:function(){
         const msgs = document.querySelectorAll('.card');
@@ -537,7 +589,6 @@ var app = {
         })
     },
     showFullMessage:function(e){
-        console.log(e.currentTarget);
         const card = e.currentTarget;
         const fullMsg = card.querySelector('#fullMsg').textContent;
         document.querySelector('.fullmessage').textContent = fullMsg;
@@ -550,7 +601,7 @@ var app = {
                 total += parseInt(msg.amount);
             })
             app.totalAmount = total;
-            document.querySelector('#totalSpent').textContent = app.totalAmount + ' Ksh';
+            (document.querySelector('#totalSpent').textContent) = app.totalAmount + ' Ksh';
             document.querySelector('#totalUsages').textContent = msgs.length;
             document.querySelector('#currentBal').textContent =  app.getCurrentBalance() + ' Ksh';
         }
@@ -559,6 +610,7 @@ var app = {
         const balReg = /balance\sis\sKsh.*\.\d{2}/
         let balance = app.shortener(string.match(balReg))
         return balance;
+        //Fix Balance returning zero when message is not an ordinary one
     },
     getCurrentBalance:function(){
         return app.messages[0].balance;
@@ -571,37 +623,56 @@ var app = {
         if(document.body.classList.contains('timelineTime')){
             const timeCards = Array.from(document.querySelector('.timeline').querySelectorAll('.card'));
             const length = timeCards.length;
-            const line = timeCards[length-1].querySelector('.line');
-            line.style.display = 'none';
+            if(length>0){
+                const line = timeCards[length-1].querySelector('.line');
+                line.style.display = 'none';
+            }
         }
     },
     showMonthToggler:function(){
         document.body.classList.add('showMonthMsgs');
-        console.log(window.localStorage.getItem('firstCustomDate'));
+        document.body.classList.remove('showDayMsgs');
+
         if(window.localStorage.getItem('firstCustomDate') == 'true'){
-            console.log("Your first time");
             window.localStorage.setItem("firstCustomDate", "false");
             document.body.classList.add('showMonthExplainer');
             setTimeout(()=>{
-                console.log("settimeout");
                 document.body.classList.remove('showMonthExplainer');
                 document.querySelector('.monthExplainer').textContent = '';
             },3500)
         }else if(window.localStorage.getItem('firstCustomDate') == 'false'){
-            console.log("Your another time");
             document.querySelector('.monthExplainer').textContent = '';
         }
     },
     hideMonthToggler:function(){
         document.body.classList.remove('showMonthMsgs');
+
     },
     showDayToggler:function(){
         document.body.classList.remove('showMonthMsgs');
+        document.body.classList.add('showReportToggle');
         document.body.classList.add('showDayMsgs');
     },
     hideDayToggler:function(){
         document.body.classList.remove('showDayMsgs');
-    }
+        document.body.classList.remove('showReportToggle');
+
+    },
+    renderMonth:function(mObj){
+        let mDate;
+        if(mObj){
+            mDate = mObj.toString();
+            const date = mDate.replace(/\w\w\w/,'').replace(/\d\d/,'').replace(/\d\d:.*/,'');
+            if(app.currentViewisTimeline){
+                document.querySelector('#reportDateTitle').textContent = date
+            }
+        }else{
+            mDate = moment(document.querySelector('#selectedDate').textContent,'DD/MM/YYYY').toString();
+            const date = mDate.replace(/\w\w\w/,'').replace(/\d\d/,'').replace(/\d\d:.*/,'');
+            document.querySelector('#selectedDate').textContent = date
+        }
+    },
+    specDay:null
 
 };
 

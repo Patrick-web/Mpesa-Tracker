@@ -71,7 +71,9 @@ function initStats(){
 }
 
   const groupedArray = getGroupedData(extracted);
+  const allBgs = [
 
+  ]
   newCanvas();
   const chartArea = document.querySelector('#chartArea').getContext('2d')
   const statsChart = new Chart(chartArea,{
@@ -82,13 +84,13 @@ function initStats(){
           label:'August 2020',
             data:groupedArray.map(group=>group.amount),
             backgroundColor:[
-              'rgba(255,99,132,0.6)',
-              'rgba(54,162,235,0.6)',
-              'rgba(255,206,86,0.6)',
-              'rgba(75,192,192,0.6)',
-              'rgba(153,102,255,0.6)',
-              'rgba(255,159,64,0.6)',
-              'rgba(255,99,132,0.6)',
+              '#AA00FF',
+              '#D500F9',
+              '#E040FB',
+              '#EA80FC',
+              '#3D5AFE',
+              '#6200EA',
+              '#651FFF',
               '#B3E5FC',
               '#81D4FA',
               '#4FC3F7',
@@ -129,6 +131,7 @@ function initStats(){
               '#1DE9B6',
               '#00BFA5'
           ],
+          borderWidth:0
         }]
     },
   

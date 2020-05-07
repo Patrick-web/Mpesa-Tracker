@@ -28,15 +28,17 @@ function addListeners(){
     })
 
     const blurBox = document.querySelector('.blur');
-    blurBox.addEventListener('click',reset);
+    console.log(blurBox);
+    blurBox.addEventListener('click',()=>{
+        if(document.body.classList.contains('showAbout')){
+            document.body.classList.remove('showAbout')
+        }
+        reset()
+    });
 
     // const pickerToggle = document.querySelector('#customDate')
     // pickerToggle.addEventListener('click',showPicker)
 
-    const months = document.querySelectorAll('.month')
-    months.forEach(month=>{
-        month.addEventListener('click',selectMonth);
-    })
 
     const items = document.querySelectorAll('.select-item');
     items.forEach(item=>{
@@ -54,6 +56,9 @@ function addListeners(){
 
     const toLight = document.querySelector('.moon');
     toLight.addEventListener('click',goLight);
+
+    const about = document.querySelector('.about');
+    about.addEventListener('click',toggleAbout)
 
 }
 function setActive(e){
@@ -75,21 +80,7 @@ function setActive(e){
         },200)
     }
 }
-function selectMonth(e){
-    if(document.querySelector('.selectedMonth')) document.querySelector('.selectedMonth').classList.remove('selectedMonth')
-    const item = e.currentTarget; 
-    item.classList.add('selectedMonth');
-    if(!item.classList.contains('custom')){
-        document.querySelector('#selectedDate').textContent = item.textContent;
-    }
-    document.querySelector('#selectedDate').insertAdjacentHTML('beforeend','<img src="img/tri.svg" class="tri" alt="">')
-    document.body.classList.remove('showCurrentFilter')
-    setTimeout(()=>{
-        reset();
-        document.body.classList.remove('showPicker')
 
-    },200) 
-}
 function showPicker(){
     document.body.classList.add('showPicker')
     document.querySelector('.showSelects').classList.remove('showSelects')
@@ -122,6 +113,7 @@ function reset(){
     if(document.body.classList.contains('showFullBox')){
         document.body.classList.remove('showFullBox')
     }
+
 }
 function hidePicker(){
     document.querySelector('#selectedDate').textContent = "Today";
@@ -134,7 +126,9 @@ function showMenu(){
 }
 function hideMenu(){
     document.body.classList.remove('showMenu')
-    
+    if(document.body.classList.contains('showAbout')){
+        document.body.classList.remove('showAbout')
+    }
 }
 function goDark(){
     document.body.classList.add('darkMode');
@@ -172,4 +166,17 @@ function hideMonthToggler(){
     if(document.body.classList.contains('showMonthMsgs')){
         document.body.classList.remove('showMonthMsgs');
     }
+}
+
+function showDayToggler(){
+    document.body.classList.remove('showMonthMsgs');
+    document.body.classList.add('showDayMsgs');
+}
+function toggleAbout(){
+    document.body.classList.toggle('showAbout');
+    // if(document.body.classList.contains('showAbout')){
+    //    document.querySelector('.dedix').classList.add('slideInDown') 
+    // }else{
+    //     document.querySelector('.dedix').classList.add('slideOutDown') 
+    // }
 }

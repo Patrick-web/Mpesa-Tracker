@@ -7,8 +7,8 @@
     z-index: 4;
 }
 .darkMode .nav{
-    background: #171717;
-    box-shadow: 0px 2px 8px 2px rgba(46, 46, 46, 0.301);
+    background: #000000;
+    box-shadow: none;
 }
 .upperNav{
     display: flex;
@@ -42,11 +42,21 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+.darkMode p::before{
+    background: rgb(0, 225, 255);
+}
 .active{
     color: yellow;
 }
+.darkMode .active{
+    color: rgb(0, 225, 255);
+}
 #logo{
     width: 12%;
+}
+.darkMode #logo{
+    filter: invert(100%);
+
 }
 #logoName{
     font-weight: 800;

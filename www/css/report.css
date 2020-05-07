@@ -1,0 +1,161 @@
+.report{
+    position: fixed;
+    top:0;
+    z-index: 10;
+    background: #4D2A64;
+    height: 100vh;
+    display: none;
+    overflow: scroll;
+    padding-bottom: 60px;
+}
+#showReport{
+    top:62%;
+}
+.showReportToggle #showReport{
+    display: block;
+}
+.showReport .report{
+    display: block;
+}
+.showReport #hideReport{
+    display: block;
+}
+.showReport #saveReport{
+    display: flex;
+}
+#hideReport{
+    position: fixed;
+    z-index: 11;
+    bottom:10px;
+    background: rgb(0, 0, 0);
+    right: 10px;
+    width: 40px;
+    padding: 10px;
+    border-radius: 50%;
+    display: none;
+    box-shadow: 0px 0px 15px rgba(52, 54, 53, 0.404);
+
+}
+.reportTitle{
+    background: white;
+    color: purple;
+    font-weight: 600;
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 0px;
+}
+#reportDateTitle{
+    text-transform: uppercase;
+    margin-left: -25px;
+    border-bottom: 5px solid white;
+}
+.reportName{
+    margin: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.table{
+    background: purple;
+    
+}
+.table-wrapper{
+    position:relative;
+    width: 98%;
+    margin: auto;
+    margin-top: 50px;
+}
+table{
+    width: 100%;
+    border-spacing:0px;
+}
+.tTitle{
+    background: purple;
+    font-size: 1.2em;
+}
+.tbl-title{
+    background: white;
+    color: #4D2A64;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.3em;
+    border-radius: 10px 10px 0px 0px;
+    font-weight: 600;
+    top:0;
+    position: absolute;
+    transform: translateY(-100%);
+}
+.tTitle th{
+    color: white;
+    border-collapse: collapse;
+    padding: 10px;
+    font-size: 1.2em;
+}
+tbody tr{
+
+    background: white;
+    text-align: center;
+    
+}
+tbody td{
+    padding: 5px;
+    font-weight: 400;
+    text-transform: uppercase;
+    border:1px solid #80008040;
+}
+.row{
+    position:relative;
+}
+
+.row:hover td{
+    border:1px solid #ffa600;
+}
+.total{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: purple;
+    font-weight: 700;
+    font-size: 1.3em;
+    background: white;
+    padding:10px;
+}
+.tTxt{
+    font-size: 1.2em;
+}
+.tAmount{
+       font-size: 1.3em;
+}
+.report-date{
+    font-size: 1.0em;
+}
+#saveReport{
+    position: fixed;
+    z-index: 11;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    background: white;
+    box-shadow: 0px 0px 15px rgba(52, 54, 53, 0.404);
+    display: none;
+    padding: 10px;
+    font-size: 1.4em;
+    color: rgb(7, 136, 61);
+    font-weight: 800;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 30px;
+}
+#saveIcon{
+    width: 15%;
+}

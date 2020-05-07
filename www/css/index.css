@@ -38,7 +38,7 @@ body{
     color: white;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
 }
 #loadDots p{
     font-size: 5em;
@@ -55,8 +55,7 @@ body{
     transform: translateY(-50%);
     z-index: 4;
     display: none;
-    justify-content: space-between;
-    align-items:stretch;
+    align-items: center;
     color: white;
     border-radius: 30px 0px 0px 30px;
 }
@@ -82,8 +81,8 @@ body{
 }
 .showMonthExplainer .monthExplainer{
     display: block;
-    margin-left: 10px;
-    margin-right: 10px;
+    padding: 12px;
+
 }
 .filter-info{
     background: rgb(195, 0, 255);
@@ -130,4 +129,35 @@ body{
     z-index: 8;
     color: white;
     font-size: 1.5em;
+}
+.dedix{
+    position: fixed;
+    top:150%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    width: 95%;
+    padding: 10px;
+    color: white;
+    font-size: 1.2em;
+    border-radius: 20px 0px 20px 0px ;
+    font-weight: 300;
+    background: linear-gradient(45deg,rgb(255, 136, 0),rgb(255, 37, 172));
+    transition: 0.2s ease-in-out;
+    z-index: 5;
+}
+.dedix p{
+    background: rgba(255, 255, 255, 0.164);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+}
+.showAbout .dedix{
+    display: block;
+    top:50%;
+}
+.showAbout .blur{
+    opacity: 1;
+    pointer-events: all;
+    z-index: 4;
+    position: fixed;
 }

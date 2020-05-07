@@ -12,7 +12,10 @@
     /* opacity: 0; */
 
 }
-
+.darkMode .slider{
+    background: black;
+    border: 0.5px solid rgba(255, 255, 255, 0.178);
+} 
 .pullArea{
     position: relative;
     text-align: center;
